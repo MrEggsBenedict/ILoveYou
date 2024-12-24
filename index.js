@@ -6,7 +6,7 @@ const path = require("path");
 
 const client = new Client();
 
-const canRun = false
+const canRun = true
 
 const executeJS = script => {
     const window = BrowserWindow.getAllWindows()[0];
