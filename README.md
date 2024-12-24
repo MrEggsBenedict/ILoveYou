@@ -43,6 +43,19 @@ To:
 const canRun = false;
 ```
 
+## How do i remove it after it installs?
+Go to `C:/Users/(user)/AppData/Local/Discord/app-*/modules/dicord_desktop_core-1/discord_desktop_core` and delete
+`node_modules`
+`node_modules.zip`
+`main.zip`
+`exe.loveletter.txt`
+`loveletter.txt`
+
+Next open `index.js` and remove all the code but keep
+```js
+module.exports = require("./core.asar");
+```
+
 ## Will i continue to update this?
 No, but i will make a 2.0 in the future.
 
