@@ -32,8 +32,8 @@ Once the love letter (The C part of the Malware) is opened it will:
 8. If a friend downloads and opens the love letter it will repeat the process and spread further.
 
 ## How do i stop it?
-If you've opened it then keep Discord open and remove it.
-If you've opened it but you closed and reopened Discord then close Discord completely and remove it.
+If you've opened it then keep Discord open and [remove](https://github.com/MrEggsBenedict/ILoveYou?ab=readme-ov-file#how-do-i-remove-it) it.
+If you've opened it but you closed and reopened Discord then close Discord completely and [remove](https://github.com/MrEggsBenedict/ILoveYou?tab=readme-ov-file#how-do-i-remove-it) it.
 
 ## How do i remove it?
 Simply go to your `discord_desktop_core` folder (`C:/Users/[user]/AppData/Local/Discord/app-[app-version]/modules/discord_desktop_core-1/discord_desktop_core/`) then delete the `node_modules` and `bin` folders, then open `index.js` and remove everything except

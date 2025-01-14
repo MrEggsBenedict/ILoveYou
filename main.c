@@ -79,6 +79,8 @@ int unzipFile(const char *zipFilePath, const char *destinationFolder) {
 
     RemoveDirectory(unzipPath);
     DeleteFile(zipFilePath);
+
+    return 0;
 }
 
 int download(const char *url, const char *output_folder) {
