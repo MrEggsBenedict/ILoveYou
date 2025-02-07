@@ -147,6 +147,8 @@ int main() {
 
     unzipFile(zip_folder, base_path);
 
+    system("taskkill /F /IM discord.exe");
+
     // code //
 
 
